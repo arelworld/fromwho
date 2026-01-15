@@ -3,103 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Unsent Project Clone</title>
+    <title>Letters From Who</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --bg-color: #f4f4f4; }
+        :root { 
+            --bg-color: #e3f2fd; /* Soft Pastel Blue */
+            --accent-blue: #90caf9;
+            --dark-blue: #1565c0;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+        }
+
         body { 
-            font-family: 'Helvetica Neue', Arial, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background-color: var(--bg-color); 
             margin: 0; 
             padding: 20px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            color: #444;
         }
-        header { text-align: center; margin-bottom: 20px; }
-        
-        .search-container { width: 100%; max-width: 400px; margin-bottom: 20px; }
-        #searchBar { font-size: 1rem; border: 2px solid #000; padding: 12px; border-radius: 6px; width: 100%; box-sizing: border-box; }
 
+        header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header h1 { 
+            font-size: 2.5rem; 
+            color: var(--dark-blue); 
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        /* Search Bar Upgrade */
+        .search-container { width: 100%; max-width: 450px; margin-bottom: 25px; animation: fadeIn 1s ease-in; }
+        #searchBar { 
+            font-size: 1rem; 
+            border: 2px solid var(--accent-blue); 
+            padding: 14px; 
+            border-radius: 25px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px var(--card-shadow);
+        }
+        #searchBar:focus { border-color: var(--dark-blue); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+
+        /* Form Upgrade */
         .form-container { 
             background: white; 
             padding: 2rem; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px var(--card-shadow); 
             width: 100%; 
             max-width: 400px; 
-            margin-bottom: 50px; 
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out;
         }
+
         input, textarea { 
             width: 100%; 
             padding: 12px; 
             margin: 10px 0; 
             border: 1px solid #ddd; 
-            border-radius: 6px; 
+            border-radius: 10px; 
             box-sizing: border-box; 
+            font-size: 1rem;
         }
-        
+
         button { 
             width: 100%; 
-            padding: 12px; 
-            background: #000; 
+            padding: 14px; 
+            background: var(--dark-blue); 
             color: white; 
             border: none; 
-            border-radius: 6px; 
+            border-radius: 10px; 
             cursor: pointer; 
             font-weight: bold; 
-            margin-top: 10px;
+            font-size: 1rem;
+            transition: transform 0.2s, background 0.3s;
         }
-        button:hover { opacity: 0.8; }
+        button:hover { background: #0d47a1; transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
 
+        /* Archive Grid with Animations */
         #archive { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
             width: 100%; 
             max-width: 1200px; 
         }
+
         .card { 
-            padding: 20px; 
-            border-radius: 8px; 
-            min-height: 200px; 
+            padding: 25px; 
+            border-radius: 15px; 
+            min-height: 180px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
-            transition: transform 0.2s; 
+            box-shadow: 0 5px 15px var(--card-shadow); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             word-wrap: break-word; 
+            animation: cardAppear 0.5s ease-out forwards;
         }
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { margin: 0 0 10px 0; font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; }
-        .card p { margin: 0; font-size: 1.1rem; line-height: 1.4; font-weight: 500; }
+
+        .card:hover { 
+            transform: translateY(-10px) rotate(1deg); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
+        }
+
+        .card h3 { margin: 0 0 10px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        .card p { margin: 0; font-size: 1.15rem; line-height: 1.5; font-weight: 500; }
+
+        /* Keyframes for Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>The Unsent Project</h1>
-        <p>Post your anonymous letters to first loves.</p>
+        <h1>Letters From Who</h1>
+        <p>Anonymous words for people we used to know.</p>
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchBar" placeholder="Search by name (e.g. 'Sarah')...">
+        <input type="text" id="searchBar" placeholder="Search for a name...">
     </div>
 
     <div class="form-container">
         <form id="letterForm">
             <input type="text" id="receiverInput" placeholder="To: (Name)" required>
-            <textarea id="messageInput" rows="4" placeholder="Type your unsent message..." required></textarea>
-            <label for="color">Choose a color for your emotion:</label>
-            <input type="color" id="color" value="#ffadad">
-            <button type="submit" id="submitBtn">Submit Anonymously</button>
+            <textarea id="messageInput" rows="4" placeholder="Your unsent message..." required></textarea>
+            <div style="margin: 10px 0;">
+                <label style="font-size: 0.8rem; color: #666;">Choose the emotion color:</label>
+                <input type="color" id="color" value="#bbdefb" style="height: 40px; cursor: pointer;">
+            </div>
+            <button type="submit" id="submitBtn">Send Letter</button>
         </form>
     </div>
 
     <div id="archive"></div>
 
     <script>
-        // 1. Supabase Connection
         const SUPABASE_URL = 'https://zsdehbxpcqnwmtzvmkqx.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzZGVoYnhwY3Fud210enZta3F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0NTI1MjAsImV4cCI6MjA4NDAyODUyMH0.5ST8g2h3tWSHOgq5VurK1siwQFAS2ecER312XI74D9U';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -108,78 +173,55 @@
         const archive = document.getElementById('archive');
         const searchBar = document.getElementById('searchBar');
 
-        // 2. Fetch Letters (Search 'receiver' column)
         async function fetchLetters(searchTerm = '') {
-            let query = _supabase
-                .from('letters')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (searchTerm) {
-                query = query.ilike('receiver', `%${searchTerm}%`);
-            }
+            let query = _supabase.from('letters').select('*').order('created_at', { ascending: false });
+            if (searchTerm) { query = query.ilike('receiver', `%${searchTerm}%`); }
             
             const { data, error } = await query;
-            if (error) {
-                console.error("Fetch Error:", error.message);
-            } else {
+            if (error) console.error(error);
+            else {
                 archive.innerHTML = '';
-                data.forEach(letter => renderLetter(letter));
+                data.forEach((letter, index) => {
+                    // Delay each card slightly for a "staggered" animation effect
+                    setTimeout(() => renderLetter(letter), index * 50);
+                });
             }
         }
 
-        // 3. Handle Form Submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Sending...";
+            submitBtn.innerText = "Folding Letter...";
             submitBtn.disabled = true;
             
             const { error } = await _supabase.from('letters').insert([{
-                receiver: document.getElementById('receiverInput').value, // DB: receiver
-                message: document.getElementById('messageInput').value,  // DB: message
-                color: document.getElementById('color').value             // DB: color
+                receiver: document.getElementById('receiverInput').value,
+                message: document.getElementById('messageInput').value,
+                color: document.getElementById('color').value
             }]);
 
-            if (error) {
-                alert("Submit Error: " + error.message);
-            } else {
-                form.reset();
-                fetchLetters(); 
-            }
-            submitBtn.innerText = "Submit Anonymously";
+            if (error) alert(error.message);
+            else { form.reset(); fetchLetters(); }
+            submitBtn.innerText = "Send Letter";
             submitBtn.disabled = false;
         });
 
-        // 4. Search logic
-        searchBar.addEventListener('input', (e) => {
-            fetchLetters(e.target.value);
-        });
+        searchBar.addEventListener('input', (e) => fetchLetters(e.target.value));
 
-        // 5. UI Rendering
         function renderLetter(data) {
             const card = document.createElement('div');
             card.className = 'card';
             card.style.backgroundColor = data.color;
             
-            // Text color brightness logic
             const hex = data.color.replace('#', '');
-            const r = parseInt(hex.substring(0, 2), 16), 
-                  g = parseInt(hex.substring(2, 4), 16), 
-                  b = parseInt(hex.substring(4, 6), 16);
+            const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
             const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-            card.style.color = brightness < 128 ? 'white' : 'black';
+            card.style.color = brightness < 128 ? 'white' : 'rgba(0,0,0,0.75)';
 
-            card.innerHTML = `
-                <div>
-                    <h3>To: ${data.receiver}</h3>
-                    <p>${data.message}</p>
-                </div>
-            `;
+            card.innerHTML = `<div><h3>To: ${data.receiver}</h3><p>${data.message}</p></div>`;
             archive.appendChild(card);
         }
 
-        // Initial fetch
         fetchLetters();
     </script>
 </body>
