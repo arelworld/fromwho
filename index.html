@@ -4,117 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Letters From Who</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Indie+Flower&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { 
-            --bg-color: #e3f2fd; 
-            --ink-color: #2c3e50;
+            --bg-color: #e3f2fd; /* Soft Pastel Blue */
+            --accent-blue: #90caf9;
+            --dark-blue: #1565c0;
+            --card-shadow: rgba(0, 0, 0, 0.1);
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background-color: var(--bg-color); 
-            margin: 0; padding: 20px; 
-            display: flex; flex-direction: column; align-items: center; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            color: #444;
+        }
+
+        header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            animation: fadeInDown 0.8s ease-out;
         }
 
         header h1 { 
-            font-family: 'Caveat', cursive; 
-            font-size: 3.5rem; 
-            color: #1565c0; 
-            margin-bottom: 0;
+            font-size: 2.5rem; 
+            color: var(--dark-blue); 
+            margin-bottom: 5px;
+            letter-spacing: -1px;
         }
 
-        /* The Paper Texture Effect */
-        .card { 
-            padding: 30px; 
-            border-radius: 2px; /* Less rounded, like cut paper */
-            min-height: 200px; 
-            position: relative;
-            box-shadow: 2px 5px 15px rgba(0,0,0,0.1);
+        /* Search Bar Upgrade */
+        .search-container { width: 100%; max-width: 450px; margin-bottom: 25px; animation: fadeIn 1s ease-in; }
+        #searchBar { 
+            font-size: 1rem; 
+            border: 2px solid var(--accent-blue); 
+            padding: 14px; 
+            border-radius: 25px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            outline: none;
             transition: all 0.3s ease;
-            
-            /* Paper Texture Overlay */
-            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px var(--card-shadow);
         }
+        #searchBar:focus { border-color: var(--dark-blue); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
 
-        .card:hover { 
-            transform: translateY(-8px) rotate(-1deg); 
-            box-shadow: 5px 15px 25px rgba(0,0,0,0.15);
-        }
-
-        /* Handwritten Content */
-        .card h3 { 
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem; 
-            text-transform: uppercase; 
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            opacity: 0.6;
-        }
-
-        .card p { 
-            font-family: 'Caveat', cursive; /* The Handwriting */
-            font-size: 1.6rem; 
-            line-height: 1.2; 
-            margin: 0;
-            color: inherit;
-        }
-
-        /* Form Styling */
-        .form-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            width: 100%; max-width: 400px;
+        /* Form Upgrade */
+        .form-container { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px var(--card-shadow); 
+            width: 100%; 
+            max-width: 400px; 
             margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        textarea {
-            font-family: 'Caveat', cursive;
-            font-size: 1.3rem;
-            border: 1px solid #ddd;
-            padding: 15px;
-        }
-
-        #searchBar {
-            border-radius: 50px;
-            padding: 15px 25px;
-            border: 2px solid #90caf9;
-            width: 100%; max-width: 450px;
-            margin-bottom: 30px;
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
             font-size: 1rem;
         }
 
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--dark-blue); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1rem;
+            transition: transform 0.2s, background 0.3s;
+        }
+        button:hover { background: #0d47a1; transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
+
+        /* Archive Grid with Animations */
         #archive { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 30px; 
-            width: 100%; max-width: 1200px; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            width: 100%; 
+            max-width: 1200px; 
         }
 
+        .card { 
+            padding: 25px; 
+            border-radius: 15px; 
+            min-height: 180px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            box-shadow: 0 5px 15px var(--card-shadow); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            word-wrap: break-word; 
+            animation: cardAppear 0.5s ease-out forwards;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px) rotate(1deg); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
+        }
+
+        .card h3 { margin: 0 0 10px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        .card p { margin: 0; font-size: 1.15rem; line-height: 1.5; font-weight: 500; }
+
+        /* Keyframes for Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Letters From Who</h1>
-        <p style="margin-top:0; opacity:0.7;">An archive of things left unsaid.</p>
+        <p>anonymous words for people we to know.</p>
     </header>
 
-    <input type="text" id="searchBar" placeholder="Search for a name (e.g. 'To: Mom')...">
+    <div class="search-container">
+        <input type="text" id="searchBar" placeholder="search for a name...">
+    </div>
 
     <div class="form-container">
         <form id="letterForm">
             <input type="text" id="receiverInput" placeholder="To: (Name)" required>
-            <textarea id="messageInput" rows="5" placeholder="Write your letter here..." required></textarea>
-            <label style="font-size:0.8rem; display:block; margin-bottom:5px;">Paper Color:</label>
-            <input type="color" id="color" value="#fff9c4"> <button type="submit" id="submitBtn" style="background:#1565c0; color:white; padding:15px; border:none; width:100%; border-radius:10px; cursor:pointer; font-weight:bold; margin-top:15px;">
-                Fold & Send
-            </button>
+            <textarea id="messageInput" rows="4" placeholder="Your unsent message..." required></textarea>
+            <div style="margin: 10px 0;">
+                <label style="font-size: 0.8rem; color: #666;">choose color:</label>
+                <input type="color" id="color" value="#bbdefb" style="height: 40px; cursor: pointer;">
+            </div>
+            <button type="submit" id="submitBtn">send letter</button>
         </form>
     </div>
 
@@ -137,14 +181,18 @@
             if (error) console.error(error);
             else {
                 archive.innerHTML = '';
-                data.forEach(letter => renderLetter(letter));
+                data.forEach((letter, index) => {
+                    // Delay each card slightly for a "staggered" animation effect
+                    setTimeout(() => renderLetter(letter), index * 50);
+                });
             }
         }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Folding...";
+            submitBtn.innerText = "Folding Letter...";
+            submitBtn.disabled = true;
             
             const { error } = await _supabase.from('letters').insert([{
                 receiver: document.getElementById('receiverInput').value,
@@ -154,7 +202,8 @@
 
             if (error) alert(error.message);
             else { form.reset(); fetchLetters(); }
-            submitBtn.innerText = "Fold & Send";
+            submitBtn.innerText = "Send Letter";
+            submitBtn.disabled = false;
         });
 
         searchBar.addEventListener('input', (e) => fetchLetters(e.target.value));
@@ -164,16 +213,12 @@
             card.className = 'card';
             card.style.backgroundColor = data.color;
             
-            // Text color brightness logic
             const hex = data.color.replace('#', '');
             const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
             const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-            card.style.color = brightness < 128 ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.7)';
+            card.style.color = brightness < 128 ? 'white' : 'rgba(0,0,0,0.75)';
 
-            card.innerHTML = `
-                <h3>To: ${data.receiver}</h3>
-                <p>${data.message}</p>
-            `;
+            card.innerHTML = `<div><h3>To: ${data.receiver}</h3><p>${data.message}</p></div>`;
             archive.appendChild(card);
         }
 
